@@ -27,9 +27,9 @@ Le projet dispose d'un [wiki](https://github.com/bassmanitram/actions-for-nautil
 1. [Installation](#installation)
 2. [Référence de Configuration](#référence-de-Configuration)
 3. [Place holders](#place-holders)
-6. [Comportement d'exécution](#comportement-dexecution)
-7. [Diagnostics](#diagnostics)
-8. [Remerciements](#remerciements)
+6. [Comportement d'exécution](#comportement-d-execution)
+8. [Diagnostics](#diagnostics)
+9. [Remerciements](#remerciements)
 
 
 # Installation
