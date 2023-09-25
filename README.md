@@ -27,7 +27,7 @@ Le projet dispose d'un [wiki](https://github.com/bassmanitram/actions-for-nautil
 1. [Installation](#installation)
 2. [Référence de Configuration](#référence-de-Configuration)
 3. [Place holders](#place-holders)
-6. [Comportement d'exécution](#comportement-d'exécution)
+6. [Comportement d'exécution](#comportement-dexecution)
 7. [Diagnostics](#diagnostics)
 8. [Remerciements](#remerciements)
 
@@ -171,6 +171,9 @@ ${HOME}/.local/share/nautilus-python/extensions/actions-for-nautilus
 ... et en remplaçant votre fichier `config.json` actuel par l'une des copies sauvegardées. Encore une fois, les changements prendront effet après un maximum d'environ 30 secondes.
 
 # Référence de Configuration
+
+[Retour au Sommaire](#-sommaire)
+
 La configuration est spécifiée dans un fichier texte JSON nommé `config.json` situé à
 
 ```
@@ -410,6 +413,9 @@ Avec les list
 es de filtres `mimetypes`, `filetypes` et `path_patterns`, tous les fichiers sélectionnés doivent correspondre à au moins une règle non niée (s'il y a des règles non niées), tout en ne correspondant à aucune des règles niées, pour que l'action associée apparaisse dans le menu contextuel.
 
 # Place holders
+
+[Retour au Sommaire](#-sommaire)
+
 Tous les détenteurs de place de ligne de commande et `cwd` mis en œuvre par le projet `filemanager/nautilus-actions` sont implémentés par cette extension, avec les mêmes sémantiques :
 
 | Marqueur    | Description                                                                                                      | Répétition |
@@ -441,6 +447,9 @@ Tout espace intégré trouvé dans les valeurs individuelles est 'échappé' pou
 La signification de la valeur `Répétition` est expliquée dans la section suivante.
 
 # Comportement d'exécution 
+
+[Retour au Sommaire](#-sommaire)
+
 Le projet `filemanager/nautilus-actions` a implémenté une fonctionnalité par laquelle une commande configurée pourrait être exécutée une seule fois, quel que soit le nombre d'éléments dans la sélection, ou une fois pour chaque élément dans la sélection.
 
 Cette extension implémente la même fonctionnalité avec les mêmes sémantiques.
@@ -499,6 +508,9 @@ Cet exemple est directement tiré de la documentation du projet `filemanager/nau
 > Ceci parce que le premier paramètre pertinent ici est `%B`. La commande est alors exécutée une seule fois, remplaçant `%B` avec la liste séparée par des espaces des noms de base. Comme la commande n'est exécutée qu'une seule fois, le `%b` est substitué une seule fois avec le (premier) nom de base.
 
 # Diagnostics
+
+[Retour au Sommaire](#-sommaire)
+
 Les messages d'erreur sont envoyés à la sortie standard (`stdout`) ou à la sortie d'erreur (`stderr`) de Nautilus - y compris les erreurs trouvées dans le fichier de configuration (telles qu'un format JSON invalide).
 
 De plus, la propriété `debug` peut être définie dans l'objet de niveau supérieur, avec une valeur de `true` ou `false` (par défaut). Lorsqu'il est défini sur `true`, d'autres informations de débogage sont imprimées sur le `stdout` de Nautilus.
@@ -515,6 +527,9 @@ nautilus --no-desktop
 Notez que, pour arrêter ce mode d'exécution spécial, vous devrez soit fermer l'émulateur de terminal, soit, depuis un autre émulateur, exécuter la commande `nautilus -q`.
 
 # Remerciements
+
+[Retour au Sommaire](#-sommaire)
+
 La principale reconnaissance est, bien sûr, à l'extension Nautilus Actions originale, plus tard renommée [Actions du gestionnaire de fichiers](https://gitlab.gnome.org/Archive/filemanager-actions) pour refléter son applicabilité plus large (Nemo, par exemple).
 
 Malheureusement, cette extension n'est plus maintenue et n'est plus fonctionnelle depuis Nautilus 42.2 (lui-même maintenant renommé Gnome Files, bien que les objets de programmation sous-jacents soient toujours dans l'espace de noms Nautilus).
