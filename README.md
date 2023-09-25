@@ -1,3 +1,6 @@
+# This is an alternative version of the documentation, provided in French. For the original English version of the software documentation, please click [here](https://github.com/bassmanitram/actions-for-nautilus#readme).
+
+
 # Actions Pour Nautilus
 Une extension pour le gestionnaire de fichiers Gnome **Files** (également connu sous le nom de Nautilus) qui vous permet d'ajouter des actions arbitraires au menu contextuel de sélection de Files.
 
