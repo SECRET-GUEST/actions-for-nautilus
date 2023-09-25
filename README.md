@@ -22,17 +22,14 @@ Elle est également _beaucoup_ plus efficace pour exécuter des commandes dans u
 Le projet dispose d'un [wiki](https://github.com/bassmanitram/actions-for-nautilus/wiki) qui est utilisé pour partager des astuces et des exemples de configuration utiles.
 
 
-## 📋 Table of Contents
+## 📋 Sommaire
 
 1. [Installation](#installation)
 2. [Référence de Configuration](#référence-de-Configuration)
-3. [to do](#-todo)
-4. [News](#news)
-5. [Usage](#-usage)
-6. [License](#-license)
-7. [Support & Questions](#-support--questions)
-8. [Recommendations](#-recommendations)
-9. [Installation](#-installation)
+3. [Place holders](#place-holders)
+6. [Comportement d'exécution](#comportement-d'exécution)
+7. [Diagnostics](#diagnostics)
+8. [Remerciements](#remerciements)
 
 
 # Installation
@@ -439,3 +436,103 @@ Tous les détenteurs de place de ligne de commande et `cwd` mis en œuvre par le
 | `%x`        | l'extension du premier élément sélectionné sans son extension (par exemple, `txt`)                              | SINGULIER |
 | `%X`        | liste séparée par des espaces des valeurs `%x` de tous les éléments sélectionnés                                | PLURIEL    |
 | `%%`        | le caractère `%`                                                                                                | TOUT       |
+Tout espace intégré trouvé dans les valeurs individuelles est 'échappé' pour assurer que le shell ou le système reconnaît chaque valeur comme un argument indépendant et complet à la commande.
+
+La signification de la valeur `Répétition` est expliquée dans la section suivante.
+
+# Comportement d'exécution 
+Le projet `filemanager/nautilus-actions` a implémenté une fonctionnalité par laquelle une commande configurée pourrait être exécutée une seule fois, quel que soit le nombre d'éléments dans la sélection, ou une fois pour chaque élément dans la sélection.
+
+Cette extension implémente la même fonctionnalité avec les mêmes sémantiques.
+
+La décision quant au mode souhaité est basée sur le premier marqueur trouvé dans la valeur de propriété `command_line` pour l'action activée:
+
+* Si le marqueur a une propriété `Répétition` de `SINGULAIRE`, la commande est exécutée une fois pour chaque élément dans la sélection.
+* Si le marqueur a une propriété `Répétition` de `PLURIEL`, la commande est exécutée une seule fois.
+* Si le marqueur a une propriété `Répétition` de `TOUT`, alors le _prochain_ marqueur est examiné.
+* Si aucun marqueur avec une valeur de répétition `SINGULAIRE` ou `PLURIEL` n'est trouvé dans la commande, alors la commande est exécutée une seule fois.
+
+De plus, si la commande doit être exécutée une fois pour chaque élément dans la sélection, alors n'importe quel marqueur avec une valeur de `Répétition` de `SINGULAIRE` est résolu à la valeur correspondante pour l'élément sélectionné pour lequel la commande est exécutée.
+
+Les marqueurs avec des valeurs `Répétition` qui ne sont pas `SINGULAIRE` sont résolus à leurs valeurs complètes pour chaque exécution de la commande.
+
+## Un exemple
+
+Cet exemple est directement tiré de la documentation du projet `filemanager/nautilus-actions`:
+
+> Disons que le dossier actuel est `/data`, et la sélection actuelle contient les trois fichiers `pierre`, `paul` et `jacques`.
+> 
+> Si nous avons demandé `echo %b`, alors les commandes suivantes seront successivement exécutées :
+> 
+> ```
+> echo pierre
+> echo paul
+> echo jacques
+> ```
+> 
+> Ceci parce que `%b` marque un paramètre SINGULIER. La commande est alors exécutée une fois pour chacun des éléments sélectionnés.
+> 
+> À l'inverse, si nous avons demandé `echo %B`, alors la commande suivante sera exécutée :
+> 
+> ```
+> echo pierre paul jacques
+> ```
+> 
+> Ceci parce que `%B` marque un paramètre PLURIEL. La commande est alors exécutée une seule fois, avec la liste des éléments sélectionnés comme arguments.
+> 
+> Si nous avons demandé `echo %b %B`, alors les commandes suivantes seront successivement exécutées :
+> 
+> ```
+> echo pierre pierre paul jacques
+> echo paul pierre paul jacques
+> echo jacques pierre paul jacques
+> ```
+> 
+> Ceci parce que le premier paramètre pertinent est `%b`, et ainsi la commande est exécutée une fois pour chaque élément sélectionné, remplaçant à chaque occurrence le paramètre `%b` avec l'élément correspondant. Le second paramètre est calculé et ajouté comme arguments à la commande exécutée.
+> 
+> Et si nous avons demandé `echo %B %b`, alors la commande suivante sera exécutée :
+> 
+> ```
+> echo pierre paul jacques pierre
+> ```
+> 
+> Ceci parce que le premier paramètre pertinent ici est `%B`. La commande est alors exécutée une seule fois, remplaçant `%B` avec la liste séparée par des espaces des noms de base. Comme la commande n'est exécutée qu'une seule fois, le `%b` est substitué une seule fois avec le (premier) nom de base.
+
+# Diagnostics
+Les messages d'erreur sont envoyés à la sortie standard (`stdout`) ou à la sortie d'erreur (`stderr`) de Nautilus - y compris les erreurs trouvées dans le fichier de configuration (telles qu'un format JSON invalide).
+
+De plus, la propriété `debug` peut être définie dans l'objet de niveau supérieur, avec une valeur de `true` ou `false` (par défaut). Lorsqu'il est défini sur `true`, d'autres informations de débogage sont imprimées sur le `stdout` de Nautilus.
+
+Pour _voir_ cette sortie, vous devrez démarrer Nautilus d'une manière spéciale depuis un émulateur de terminal (par exemple, `gnome-terminal`):
+
+```
+# Arrêter Nautilus
+nautilus -q  
+# Redémarrer avec `stdout` et `stderr` affichés sur le terminal
+nautilus --no-desktop
+```
+
+Notez que, pour arrêter ce mode d'exécution spécial, vous devrez soit fermer l'émulateur de terminal, soit, depuis un autre émulateur, exécuter la commande `nautilus -q`.
+
+# Remerciements
+La principale reconnaissance est, bien sûr, à l'extension Nautilus Actions originale, plus tard renommée [Actions du gestionnaire de fichiers](https://gitlab.gnome.org/Archive/filemanager-actions) pour refléter son applicabilité plus large (Nemo, par exemple).
+
+Malheureusement, cette extension n'est plus maintenue et n'est plus fonctionnelle depuis Nautilus 42.2 (lui-même maintenant renommé Gnome Files, bien que les objets de programmation sous-jacents soient toujours dans l'espace de noms Nautilus).
+
+J'ai été tenté de reprendre la maintenance de ce projet, mais j'ai été rebuté par son implémentation en C complexe (je suis un programmeur en C parfaitement compétent, notez bien !).
+
+J'étais convaincu qu'une implémentation beaucoup moins complexe de la plupart des fonctionnalités principales était possible en utilisant Python et le liant à Nautilus trouvé dans le framework `nautilus-python`, et en utilisant un format de configuration beaucoup plus sémantiquement pertinent tel que JSON et en adaptant un éditeur JSON existant plutôt que de construire une UI de configuration à partir de zéro.
+
+Je pense avoir prouvé mon point de vue :)
+
+Un autre grand remerciement est à [Christoforos Aslanov](https://github.com/chr314) dont l'extension [Nautilus Copy Path](https://github.com
+
+/chr314/nautilus-copy-path) a fourni l'inspiration et le modèle pour le POC original de cette extension, et dont la structure de projet, la procédure d'installation et la documentation que j'ai initialement déchirée sans pitié :)... et je suis même assez irrespectueux pour avoir fourni une alternative à son extension dans ma propre configuration d'échantillon !
+
+Merci et excuses, Christoforos.
+
+L'éditeur basé sur le schéma JSON [JSON-Editor](https://github.com/json-editor/json-editor) est une trouvaille incroyable ! Le configurateur est, en effet, une instance de cet éditeur avec quelques ajustements pour le rendre un peu plus naturel pour ce cas d'utilisation !
+
+L'éditeur de source JSON intégré est l'éditeur de source [ACE](https://ace.c9.io/) - un autre projet incroyable qui était si facile à intégrer qu'on se demande pourquoi JSON-Editor ne l'utilise pas pour sa propre fonctionnalité d'édition de source JSON - je sens un PR à venir :).
+
+Alors, un GRAND cri à ces deux projets !
