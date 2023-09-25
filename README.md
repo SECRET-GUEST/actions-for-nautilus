@@ -1,4 +1,4 @@
-# This is an alternative version of the documentation, provided in French. For the original English version of the software documentation, please click [here](https://github.com/bassmanitram/actions-for-nautilus#readme).
+### This is an alternative version provided in French. For the original English software , [please click here](https://github.com/bassmanitram/actions-for-nautilus#readme).
 
 
 # Actions Pour Nautilus
