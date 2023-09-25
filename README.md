@@ -1,243 +1,192 @@
-**IMPORTANT NOTE**
-All users of releases 1.6.0 and before should update their installations to release 1.6.1 as soon as possible
-due to a security issue.
+# Actions Pour Nautilus
+Une extension pour le gestionnaire de fichiers Gnome **Files** (également connu sous le nom de Nautilus) qui vous permet d'ajouter des actions arbitraires au menu contextuel de sélection de Files.
 
-# Actions For Nautilus
-An extension to the Gnome **Files** file manager (otherwise known as Nautilus) that allows 
-you to add arbitrary actions to the Gnome Files selection context menu.
+Cette extension est un "remplaçant" pour la fonctionnalité désormais obsolète du gestionnaire de fichiers Nautilus du projet `filemanager/nautilus-actions`.
 
-This extension is a "replacement" for the now-defunct Nautilus file manager functionality
-of the `filemanager/nautilus-actions` project.
+L'extension prend en charge de nombreuses fonctionnalités les plus couramment utilisées du projet d'extension d'origine, y compris :
 
-The extension supports many of the most commonly used features of the original extension project,
-including:
+* structurer des éléments de menu contextuel pour les sélections du gestionnaire de fichiers Nautilus, y compris les sous-menus imbriqués
+* filtrer les éléments affichés en fonction de :
+  * nombre de fichiers dans la sélection,
+  * permissions d'accès de l'utilisateur pour les fichiers sélectionnés,
+  * mimetypes des fichiers sélectionnés (conditions correspondantes et non correspondantes supportées, ainsi que les motifs de mimetypes),
+  * types de fichiers basiques des fichiers sélectionnés - par exemple 'fichier', 'répertoire', 'lien symbolique'... - (conditions correspondantes et non correspondantes supportées),
+  * correspondance des motifs de chemin complet, exprimés comme motifs glob ou expressions régulières, là encore avec support pour conditions correspondantes et non correspondantes.
+* exécution d'une commande/script arbitraire lorsqu'un élément de menu est activé, avec les mêmes sémantiques "PLURAL" et "SINGULAR" que le projet `filemanager/nautilus-actions`
+* support pour tous les placeholders de ligne de commande implémentés par le projet `filemanager/nautilus-actions`, avec les mêmes sémantiques.
 
-* structuring context menu items for Nautilus File Manager selections including
-  nested sub menus
-* filtering the displayed items based on:
-  * number of files in the selection,
-  * user's access permissions for the selected files,
-  * mimetypes of the selected files (matching and non-matching conditions
-    supported, as well as mimetype globs),
-  * basic filetypes of the selected files - e.g. 'file', 'directory',
-    'symbolic-link' ... - (matching and non-matching conditions supported),
-  * full path pattern matching, expressed as glob patterns or regular expressions, again
-    with support for matching and non-matching conditions.
-* execution of an arbitrary command/script when a menu item is activated, with
-  the same "PLURAL" and "SINGULAR" semantics as the 
-  `filemanager/nautilus-actions` project
-* support for all the command line placeholders implemented by the 
-  `filemanager/nautilus-actions` project, with the same semantics
+Elle est également _beaucoup_ plus efficace pour exécuter des commandes dans un shell que l'extension d'origine, permettant la construction de pipelines et de boucles, ainsi que l'utilisation d'expressions shell plus complexes, sans avoir besoin d'écrire des scripts enveloppants.
 
-It is also _much_ better at executing commands in a shell than the original
-extension, allowing for the construction of pipelines and loops, as well as the 
-use of more complex shell expressions, without the need for writing wrapper scripts.
+[Une application de configuration](#configuration-ui) du nom de "Actions Pour Nautilus Configurator" est installée dans votre collection d'applications de bureau. Lorsque vous utilisez le configurateur pour la première fois, si aucun fichier de configuration existant n'est trouvé, la [configuration d'exemple](./configurator/sample-config.json) fournie sera installée.
 
-[A configuration application](#configuration-ui) by the name "Actions For Nautilus 
-Configurator" is installed into your desktop applications collection. When you
-first use the configurator, if no existing configuration file is found, the delivered
-[sample configuration](./configurator/sample-config.json) will be installed.
+Le projet dispose d'un [wiki](https://github.com/bassmanitram/actions-for-nautilus/wiki) qui est utilisé pour partager des astuces et des exemples de configuration utiles.
 
-The project has a [wiki](https://github.com/bassmanitram/actions-for-nautilus/wiki) that is used to share 
-tips and tricks and useful configuration examples.
+
+## 📋 Table of Contents
+
+1. [Installation](#installation)
+2. [Référence de Configuration](#référence-de-Configuration)
+3. [to do](#-todo)
+4. [News](#news)
+5. [Usage](#-usage)
+6. [License](#-license)
+7. [Support & Questions](#-support--questions)
+8. [Recommendations](#-recommendations)
+9. [Installation](#-installation)
+
 
 # Installation
-## Debian-based systems
+## Systèmes basés sur Debian
 
-Debian packages of the most recent releases are provided in the [dist](./dist) folder.
+Des paquets Debian des versions les plus récentes sont fournis dans le dossier [dist](./dist).
 
-Simply download the package, install with your package installer, then launch the
-**Actions For Nautilus Configurator** application from your applications list in
-order to start building a configuration based upon the delivered 
-[sample](#sample-configuration).
+Téléchargez simplement le paquet, installez-le avec votre installateur de paquets, puis lancez l'application **Actions Pour Nautilus Configurator** depuis la liste de vos applications pour commencer à construire une configuration basée sur l'[exemple](#sample-configuration) fourni.
 
-To enable the extension after installation, you will need to restart Nautilus/Files:
+Pour activer l'extension après l'installation, vous devrez redémarrer Nautilus/Files :
 
 * `Alt F2`
 * `nautilus -q`
 
-should do it.
+devrait suffire.
 
-### Suggested Additional Packages
-The Debian package specifies the following **Suggests** dependencies that will
-greatly enhance the utility of the extension as well as allow the delivered sample
-configuration to work on first launch:
+### Paquets Additionnels Suggérés
+Le paquet Debian spécifie les dépendances suivantes comme **Suggère**, qui augmenteront grandement l'utilité de l'extension ainsi que permettront à la configuration d'exemple fournie de fonctionner dès le premier lancement :
 
-* `xclip`  - a command line tool for managing the X clipboards 
-* `zenity` - a Gnome UI toolkit for shell scripts
+* `xclip`  - un outil en ligne de commande pour gérer les presse-papiers X
+* `zenity` - une boîte à outils d'interface utilisateur Gnome pour les scripts shell
 
-It is highly recommended to install these extra packages.
+Il est fortement recommandé d'installer ces paquets supplémentaires.
 
-## Manual Installation
-### Install Dependencies
+## Installation Manuelle
+### Installer les Dépendances
 
-Firstly, of course, the extension relies upon GNOME and GNOME Files (aka
-Nautilus) being installed.
+Premièrement, bien sûr, l'extension dépend de GNOME et GNOME Files (alias Nautilus) étant installés.
 
-Then it relies on `python 3+`, `nautilus-python`, and certain
-process management tools (which are likely already installed but
-just in case :)).
+Ensuite, elle dépend de `python 3+`, `nautilus-python`, et certains outils de gestion de processus (qui sont probablement déjà installés mais au cas où :)).
 
 * Fedora `sudo dnf install nautilus-python python3-gobject procps-ng js-jquery`
 * Ubuntu `sudo apt install python3-nautilus python3-gi procps libjs-jquery`
 * Arch `sudo pacman -S python-nautilus python-gobject procps-ng jquery`
 
-### Download & Install the Extension
+### Télécharger & Installer l'Extension
 
-To install the extension manually, then, you will need to
-follow these steps:
+Pour installer l'extension manuellement, vous devrez suivre ces étapes :
 
 1. `git clone https://github.com/bassmanitram/actions-for-nautilus.git`
 2. `cd actions-for-nautilus`
-3. `make install` to install for only your use, or `sudo make install_global`
-   to install for all users.
-5. You _may_ have to restart the Gnome shell in order to see the configuration
-   application in your desktop applications list
-   
-If you don't have the `git` or `make` commands in your system, simply install them
-in the same way you installed the [other dependencies](#install-dependencies).
+3. `make install`
 
-On _first_ installation, you won't see anything different in the Nautilus context 
-menus, because you need to have a working configuration for anything to change. 
-The sample configuration will be installed for the user simply by starting the 
-[configuration UI](#configuration-ui).
+ pour installer uniquement pour votre utilisation, ou `sudo make install_global` pour installer pour tous les utilisateurs.
+5. Vous _pourriez_ devoir redémarrer la coquille Gnome pour voir l'application de configuration dans votre liste d'applications de bureau
 
-### Uninstallation
+Si vous n'avez pas les commandes `git` ou `make` dans votre système, installez-les simplement de la même manière que vous avez installé les [autres dépendances](#install-dependencies).
+
+Lors de la _première_ installation, vous ne verrez rien de différent dans les menus contextuels de Nautilus, car vous avez besoin d'avoir une configuration fonctionnelle pour que quelque chose change. La configuration d'exemple sera installée pour l'utilisateur simplement en démarrant l'[interface utilisateur de configuration](#configuration-ui).
+
+### Désinstallation
 
 1. `cd path/to/actions-for-nautilus`   
-2. `make uninstall` if you installed for only your use, or `sudo make uninstall_global`
-   if you installed for all users.
-3. You _may_ have to restart the Gnome shell in order to remove the configuration
-   application from your desktop applications list
+2. `make uninstall` si vous avez installé uniquement pour votre utilisation, ou `sudo make uninstall_global` si vous avez installé pour tous les utilisateurs.
+3. Vous _pourriez_ devoir redémarrer la coquille Gnome pour enlever l'application de configuration de votre liste d'applications de bureau
 
 
-## Sample configuration
-The delivered [sample configuration file](./configurator/sample-config.json) is copied to 
+## Configuration d'exemple
+Le [fichier de configuration d'exemple](./configurator/sample-config.json) fourni est copié à 
 
 ```
 ${HOME}/.local/share/actions-for-nautilus/config.json
 ```
 
-when you first start the configuration UI, if there is no existing configuration. 
+lorsque vous démarrez l'interface utilisateur de configuration pour la première fois, s'il n'y a pas de configuration existante.
 
-The configuration contains examples of command and menu construction, 
-including:
+La configuration contient des exemples de construction de commandes et de menus, y compris :
 
-* contextual submenus, 
-* mimetype, file type, and selection count conditions, 
-* the use of command pipelines, 
-* exploiting `$(...)`/backtick command and argument substitution.
+* des sous-menus contextuels,
+* conditions de mimetype, de type de fichier, et de nombre de sélection,
+* l'utilisation de pipelines de commandes,
+* exploitation des substitutions de commandes et d'arguments `$(...)`/backtick.
 * ...
 
-The configured commands rely on a few extra dependencies that need to be installed
-if you want to see the sample configuration working properly:
+Les commandes configurées dépendent de quelques dépendances supplémentaires qui doivent être installées si vous voulez voir la configuration d'exemple fonctionner correctement :
 
-* `gedit` - the standard Gnome editor - you probably already have this
-* `gnome-terminal` - the standard Gnome terminal emulator (for now) - you probably have
-  this too.
-* `xclip`  - a command line tool for managing the X clipboards 
-* `zenity` - a Gnome UI toolkit for shell scripts
+* `gedit` - l'éditeur standard Gnome - vous l'avez probablement déjà
+* `gnome-terminal` - l'émulateur de terminal standard Gnome (pour l'instant) - vous l'avez probablement aussi.
+* `xclip`  - un outil en ligne de commande pour gérer les presse-papiers X
+* `zenity` - une boîte à outils d'interface utilisateur Gnome pour les scripts shell
 
-Again, these can be installed using your platform package manager as shown above.
+Ces outils peuvent également être installés en utilisant le gestionnaire de paquets de votre plateforme comme indiqué ci-dessus.
 
-It is also possible that the semantics of the more complex command structures rely
-upon shell features that, if you are not using BASH as your system shell, will not
-work for you.
+Il est également possible que la sémantique des structures de commandes plus complexes repose sur des fonctionnalités de shell qui, si vous n'utilisez pas BASH comme shell système, ne fonctionneront pas pour vous.
 
-### The Gnome Terminal "No Close" profile
-When executing the `gnome-terminal` command, the sample configuration references a 
-`gnome-terminal` profile named "No Close".
 
-This is not a standard profile, but is a useful one to define in that the terminal
-doesn't close when the command it is running ends, allowing you to see command output
-and/or to relaunch the command.
+### Le Profil "Pas de Fermeture" de Gnome Terminal
+Lors de l'exécution de la commande `gnome-terminal`, la configuration d'exemple fait référence à un profil `gnome-terminal` nommé "Pas de Fermeture".
+
+Il ne s'agit pas d'un profil standard, mais c'est utile de le définir car le terminal ne se ferme pas lorsque la commande qu'il exécute se termine, vous permettant de voir la sortie de la commande et/ou de relancer la commande.
+
+Vous pouvez créer ce profil comme suit :
   
-You can create this profile as follows:
-  
-* Open the `gnome-terminal` application
-* Find the `Preferences` dialog (either a menu item or click on the `...` button, then
-  on `Preferences`)
-* Click on the **+** next to the word `Profiles`
-* Give the new profile the name `No Close`
-* Click on the `Command` tab
-* Ensure that the `When command exits:` option is set to `Hold terminal open`
-* Configure anything else you need concerning the profile behavior and look and feel
+* Ouvrez l'application `gnome-terminal`
+* Trouvez la boîte de dialogue `Préférences` (soit un élément de menu ou cliquez sur le bouton `...`, puis sur `Préférences`)
+* Cliquez sur le **+** à côté du mot `Profils`
+* Donnez à ce nouveau profil le nom `Pas de Fermeture`
+* Cliquez sur l'onglet `Commande`
+* Assurez-vous que l'option `Lorsque la commande se termine :` est réglée sur `Maintenir le terminal ouvert`
+* Configurez tout autre paramètre nécessaire concernant le comportement et l'apparence du profil
 
-# Configuration UI
-When you install this extension, a configuration application is installed into 
-your local desktop Applications collection.
+# Interface de Configuration
+Lorsque vous installez cette extension, une application de configuration est installée dans votre collection d'applications de bureau locale.
 
-To start the application:
-* Open your Applications collection navigator (menu, panel, ...)
-* Find **Actions For Nautilus Configurator**
-* Click on it
+Pour démarrer l'application :
+* Ouvrez le navigateur de votre collection d'applications (menu, panneau, ...)
+* Trouvez **Actions Pour Nautilus Configurator**
+* Cliquez dessus
 
-The application will open in your default Web Browser. It will present the
-current configuration (creating one from the [delivered sample](./configurator/sample-config.json) 
-if no configuration yet exists for the user).
+L'application s'ouvrira dans votre navigateur Web par défaut. Elle présentera la configuration actuelle (en créant une à partir de [l'exemple fourni](./configurator/sample-config.json) si aucune configuration n'existe encore pour l'utilisateur).
 
-The UI _should_ be pretty self-explanatory - you can add, delete, move and
-modify Menus and Commands at will.
+L'interface _devrait_ être assez explicite - vous pouvez ajouter, supprimer, déplacer et modifier les Menus et les Commandes à votre guise.
 
-There is also an embedded JSON source editor with syntax checking should you wish
-to perform actions not supported by the main UI (such as copy/paste of actions).
+Il y a aussi un éditeur de source JSON intégré avec vérification de la syntaxe si vous souhaitez effectuer des actions non supportées par l'interface principale (comme copier/coller des actions).
 
-Simply close the web page to quit the configurator.
+Fermez simplement la page web pour quitter le configurateur.
 
-*NOTE* the configurator web application NEVER communicates outside of your own
-system unless you click on an external link referenced in the help information.
+*NOTE* l'application web de configuration NE communique JAMAIS en dehors de votre propre système, à moins que vous ne cliquiez sur un lien externe référencé dans les informations d'aide.
 
-## Configurator help
-The UI includes integrated help that can be accessed in one of two ways:
+## Aide du Configurateur
+L'interface utilisateur inclut une aide intégrée accessible de deux façons :
 
-* Click on the `Show Help` button to open the help viewport to the right of the
-  main configurator UI, positioned at the beginning of the help information.
-* Click on any of the &#9432; icons to open the help viewport to the right of the
-  main configurator UI, positioned at the information pertaining to the UI element
-  to which the &#9432; icon is attached.
+* Cliquez sur le bouton `Afficher l'Aide` pour ouvrir le volet d'aide à droite de l'interface principale du configurateur, positionné au début des informations d'aide.
+* Cliquez sur l'une des icônes &#9432; pour ouvrir le volet d'aide à droite de l'interface principale du configurateur, positionné sur les informations relatives à l'élément de l'interface utilisateur auquel l'icône &#9432; est attachée.
 
-When both the configurator and the help information are displayed, the viewport
-sizes can be adjusted by dragging the line that separates them.
+Quand le configurateur et les informations d'aide sont affichés, la taille des volets peut être ajustée en faisant glisser la ligne qui les sépare.
 
-To close the help information, simply click on the `Hide Help` button (which is
-the `Show Help` button with the label modified when the help information is being displayed).
+Pour fermer les informations d'aide, cliquez simplement sur le bouton `Masquer l'Aide` (qui est le bouton `Afficher l'Aide` avec le label modifié lorsque les informations d'aide sont affichées).
 
-## Saving your changes
-In order to save configuration changes, click on the **Save Config** button. 
-Your changes should be visible in Nautilus after about 30 seconds (the timeout
-for the internal config file change watcher).
+## Sauvegarder vos changements
+Pour sauvegarder les changements de configuration, cliquez sur le bouton **Sauvegarder Config**. Vos changements devraient être visibles dans Nautilus après environ 30 secondes (le délai d'expiration pour le surveillant interne de changement de fichier de config).
 
-The existing configuration file is backed up before being overridden by a saved
-configuration. You can reinstate an older configuration by opening Nautilus/Files,
-navigating to the folder...
+Le fichier de configuration existant est sauvegardé avant d'être écrasé par une configuration sauvegardée. Vous pouvez rétablir une ancienne configuration en ouvrant Nautilus/Files, en naviguant vers le dossier...
 
 ```
 ${HOME}/.local/share/nautilus-python/extensions/actions-for-nautilus
 ```
 
-and replacing your current `config.json` file with any of the backed up
-copies. Again, changes will take effect after a maximum of about 30
-seconds.
+... et en remplaçant votre fichier `config.json` actuel par l'une des copies sauvegardées. Encore une fois, les changements prendront effet après un maximum d'environ 30 secondes.
 
-# Configuration reference
-The configuration is specified in a JSON text file named `config.json` located in
+# Référence de Configuration
+La configuration est spécifiée dans un fichier texte JSON nommé `config.json` situé à
 
 ```
 ${HOME}/.local/share/actions-for-nautilus
 ```
 
-The extension is delivered with a strict valid 
-[JSON Schema](./configurator/actions-for-nautilus.schema.json) 
-that describes exactly how the configuration file needs to be built.
+L'extension est livrée avec un strict valide [Schéma JSON](./configurator/actions-for-nautilus.schema.json) qui décrit exactement comment le fichier de configuration doit être construit.
 
-(Note that there is also a _second_ [JSON Schema](./configurator/actions-for-nautilus.ui.schema.json)
-delivered. This is for internal use by the configurator and should not be
-considered a canonical description of the extension configuration file).
+(Notez qu'il y a aussi un _deuxième_ [Schéma JSON](./configurator/actions-for-nautilus.ui.schema.json) livré. Celui-ci est pour usage interne par le configurateur et ne devrait pas être considéré comme une description canonique du fichier de configuration de l'extension).
 
-## Top level structure
-The top level structure in the configuration file must be a JSON object which is 
-expected to contain a property named `actions` whose value is, itself, an array of 
-objects, and a string property named `sort`:
+## Structure de niveau supérieur
+La structure de niveau supérieur dans le fichier de configuration doit être un objet JSON qui est censé contenir une propriété nommée `actions` dont la valeur est, elle-même, un tableau d'objets, et une propriété de chaîne nommée `sort` :
+
 
 ```
 {
@@ -250,21 +199,15 @@ objects, and a string property named `sort`:
 }
 ```
 
-The `sort` property is optional and indicates the approach to use for sorting 
-the actions presented by the top level menu. The allowed values are:
-* `manual` - The extension leaves the items in the order in which they appear 
-  in the configuration
-* `auto` - The extension sorts the items in alphanumeric order
+La propriété `sort` est optionnelle et indique la méthode à utiliser pour trier les actions présentées par le menu de niveau supérieur. Les valeurs autorisées sont :
+* `manual` - L'extension laisse les éléments dans l'ordre dans lequel ils apparaissent dans la configuration
+* `auto` - L'extension trie les éléments par ordre alphanumérique
 
-The default value is - `manual`
+La valeur par défaut est - `manual`
 
-The `actions` array contains the configuration of each action to be presented
-in the top level menu
+Le tableau `actions` contient la configuration de chaque action à présenter dans le menu de niveau supérieur.
 
-Each element of the array is then an object (and *action*) which, primarily, must have a 
-property named `type` whose value is either `command` or `menu`, and a property 
-named `label` whose value is the text that you wish to see in the Nautilus 
-context menu.
+Chaque élément du tableau est alors un objet (et *action*) qui, principalement, doit avoir une propriété nommée `type` dont la valeur est soit `command` soit `menu`, et une propriété nommée `label` dont la valeur est le texte que vous souhaitez voir dans le menu contextuel de Nautilus.
 
 ```
     {
@@ -280,13 +223,10 @@ context menu.
     ...
 
 ```
+Les sections suivantes décrivent en détail ces objets d'action.
 
-The subsequent sections describe these action objects in detail.
-
-## Menu actions
-Actions with a `type` property of `menu` define "sub menu" actions that, when 
-clicked on, expose a nested menu of further actions, themselves being command 
-actions or further nested menus.
+## Actions de menu
+Les actions avec une propriété `type` de `menu` définissent des actions de "sous-menu" qui, lorsqu'on clique dessus, exposent un menu imbriqué de davantage d'actions, celles-ci étant des actions de commande ou d'autres menus imbriqués.
 
 ```
     ...
@@ -301,27 +241,20 @@ actions or further nested menus.
     ...
 ```
 
-Menu actions are expected to contain two additional properties:
+Les actions de menu sont censées contenir deux propriétés supplémentaires :
 
-* `actions` - REQUIRED - an array of elements each of which follows the same
-  pattern as the elements contained by the configuration's root `actions` 
-  property
+* `actions` - OBLIGATOIRE - un tableau d'éléments dont chacun suit le même modèle que les éléments contenus par la propriété `actions` à la racine de la configuration
 
-* `sort` - OPTIONAL - The approach to use for sorting the actions
-  presented by the menu
-  * `manual` - The extension leaves the items in the order in which they appear 
-    in the configuration
-  * `auto` - The extension sorts the items in alphanumeric order
+* `sort` - FACULTATIF - L'approche à utiliser pour trier les actions présentées par le menu
+   * `manual` - L'extension laisse les éléments dans l'ordre dans lequel ils apparaissent dans la configuration
+   * `auto` - L'extension trie les éléments par ordre alphanumérique
+   
+  *Par défaut* - `manual`
 
-  *Default* - `manual`
+Lorsque le menu contextuel de Nautilus/Files est activé pour une sélection, l'extension évalue toutes les commandes configurées au sein d'un menu pour déterminer si les commandes sont pertinentes pour la sélection actuelle. Si aucune commande n'est jugée pertinente, alors le menu n'apparaît pas dans le menu contextuel de Nautilus/Files.
 
-When the Nautilus/Files context menu is activated for a selection, the extension assesses 
-all the commands configured within a menu to establish if the commands are relevant for the current 
-selection. If no commands are found to be relevant, then the menu does not appear in the Nautilus/Files 
-context menu.
-
-## Command actions
-Actions with a `type` property of `command` define actions that, when clicked on, execute a command.
+## Actions de commande
+Les actions avec une propriété `type` de `command` définissent des actions qui, lorsqu'on clique dessus, exécutent une commande.
 
 ```
     ...
@@ -345,363 +278,164 @@ Actions with a `type` property of `command` define actions that, when clicked on
     },
     ...
 ```
+Celles-ci sont supposées avoir les propriétés supplémentaires suivantes :
 
-These are expected to have the following additional properties:
+* `command_line` - OBLIGATOIRE - la commande système à exécuter lorsque l'élément de menu est cliqué, exprimé comme une chaîne de caractères.
 
-* `command_line` - REQUIRED - the system command the should be executed when 
-  the menu item is clicked on, expressed as a string. 
+  La commande peut contenir des expressions réservées qui sont développées pour détenir les détails des fichiers sélectionnés qui sont passés comme arguments à la commande.
+
+  Le projet `filemanager/nautilus-actions` prend en charge l'ensemble complet de réserves, avec les mêmes sémantiques, elles sont documentées plus loin.
+
+  Notez qu'en utilisant l'option `use_shell` (ci-dessous), la ligne de commande peut être presque tout ce que vous pouvez entrer dans un prompt shell, y compris les fonctionnalités suivantes :
   
-  The command may contain place holder expressions that are expanded to hold 
-  details of the selected files that are passed as arguments to the command.
-  
-  The full set of placeholders implemented by the `filemanager/nautilus-actions` 
-  project are supported, with the same semantics - these are further documented 
-  below.
-
-  Note that, when using the `use_shell` option (below), the command line can
-  be just about anything you can enter at a shell prompt - including the following 
-  features:
-
   * Pipelines
-  * `$(...)` or "backtick" command and argument generation/expansion
-  * Environment variable resolution
-  * Loops
+  * Génération/expansion de commandes et d'arguments `$(...)` ou "backtick"
+  * Résolution de variables d'environnement
+  * Boucles
   * ...
-
-  See the [sample configuration](./configurator/sample-config.json) for a few examples.
-
-* `cwd` - OPTIONAL - the working directory that the command should "run in"
-  expressed as a string
   
-  This too can contain place holder expressions, though obviously they should
-  resolve to a single valid directory name
-
-  *Default* - undefined
-
-* `use_shell` - OPTIONAL - a boolean value (`true` or `false`) that indicates
-  whether the command should be run by the default system shell. If the command
-  is a shell script, or relies on any shell expansion semantics, you should set 
-  the value of this property to `true`.
-
-  *Default* - `false`
-
-* `filetypes` - OPTIONAL - the general filetypes of the selected files for which
-  this action is to be displayed (or for which the action is not to be displayed)
-
-  The value should be a JSON list of strings each one of which should have one 
-  of the following values:
-
-  * `unknown` - for files of an unknown type
-  * `directory` - for directories
-  * `file` - for standard files
-  * `symbolic-link` - for symbolic links
-  * `special` - for special files (pipes, devices, ...)
-  * `standard` - shorthand for directories, standard files, and symbolic links
+  Consultez la [configuration d'exemple](./configurator/sample-config.json) pour quelques exemples.
   
-  Again, these can be prefixed with a `!` character to indicate that the 
-  selected files should _not_ be of that type.
+* `cwd` - FACULTATIF - le répertoire de travail dans lequel la commande doit "s'exécuter", exprimé comme une chaîne de caractères.
 
-  Only the first appearance of a specific filetype (regardless of any `!` "not"
-  prefix) is taken into account.
+  Cela peut aussi contenir des expressions réservées, bien qu'elles doivent résoudre en un seul nom de répertoire valide.
+  
+  *Par défaut* - non défini
+  
+* `use_shell` - FACULTATIF - une valeur booléenne (`true` ou `false`) indiquant si la commande doit être exécutée par le shell système par défaut. Si la commande est un script shell, ou dépend de toute sémantique d'expansion shell, vous devez régler la valeur de cette propriété sur `true`.
 
-  *Default* - all filetypes are accepted
+  *Par défaut* - `false`
+  
+* `filetypes` - FACULTATIF - les types de fichiers généraux des fichiers sélectionnés pour lesquels cette action doit être affichée (ou pour lesquels l'action ne doit pas être affichée).
 
-* `min_items` - OPTIONAL - the minimum number of items in the selection for 
-  which this action will be displayed.
+  La valeur doit être une liste JSON de chaînes dont chacune doit avoir une des valeurs suivantes :
+  
+  * `unknown` - pour les fichiers d'un type inconnu
+  * `directory` - pour les répertoires
+  * `file` - pour les fichiers standard
+  * `symbolic-link` - pour les liens symboliques
+  * `special` - pour les fichiers spéciaux (pipes, périphériques, ...)
+  * `standard` - raccourci pour les répertoires, les fichiers standard et les liens symboliques
 
-  For example, if the command is expected to, say, compare a number of files,
-  it doesn't make sense for the action to be displayed when less than two files
-  are in the selection. In that case, you would set the value of this property
-  to `2` which would prevent the action from appearing in the context menu when 
-  only one file is in the selection. 
+  De nouveau, ceux-ci peuvent être préfixés par un caractère `!` pour indiquer que les fichiers sélectionnés ne doivent _pas_ être de ce type.
 
-  If specified, the value must be greater than zero.
+  Seule la première apparition d'un type de fichier spécifique (indépendamment de tout préfixe `!` "non") est prise en compte.
 
-  If the value of `max_items` is greater than zero, the value of this property must 
-  be less than or equal to the value of `max_items`.
+  *Par défaut* - tous les types de fichiers sont acceptés
 
-  *Default* - 1
+* `min_items` - FACULTATIF - le nombre minimum d'éléments dans la sélection pour lesquels cette action sera affichée.
 
-* `max_items` - OPTIONAL - the maximum number of items in the selection for 
-  which this action will be displayed.
+  Par exemple, si la commande doit, disons, comparer un certain nombre de fichiers, cela n'a pas de sens que l'action soit affichée lorsque moins de deux fichiers sont dans la sélection. Dans ce cas, vous définiriez la valeur de cette propriété à `2`, ce qui empêcherait l'action d'apparaître dans le menu contextuel lorsqu'un seul fichier est dans la sélection.
 
-  For example, if the command is expected to, say, start an HTTP server in a 
-  selected directory, it doesn't make sense for the action to be displayed when 
-  more than one directory is in the selection. Therefore, in this case, you 
-  would set the value of this property to `1`, which would prevent 
-  the action from appearing in the context menu when more than one directory is
-  in the selection.
+  Si spécifié, la valeur doit être supérieure à zéro.
 
-  A value of zero denotes `unlimited`.
+  Si la valeur de `max_items` est supérieure à zéro, la valeur de cette propriété doit être inférieure ou égale à la valeur de `max_items`.
 
-  If the value is greater than zero, the value of the `min_items` property must 
-  be less than or equal to this value.
+  *Par défaut* - 1
 
-  *Default* - unlimited
+* `max_items` - FACULTATIF - le nombre maximum d'éléments dans la sélection pour lesquels cette action sera affichée.
 
-* `mimetypes` - OPTIONAL - the mimetypes of the selected files for which this
-  action is to be displayed (or for which the action is not to be displayed).
+  Par exemple, si la commande doit, disons, démarrer un serveur HTTP dans un répertoire sélectionné, cela n'a pas de sens que l'action soit affichée lorsque plus d'un répertoire est dans la sélection. Donc, dans ce cas, vous définiriez la valeur de cette propriété à `1`, ce qui empêcherait l'action d'apparaître dans le menu contextuel lorsque plus d'un répertoire est dans la sélection.
 
-  The value should be a JSON list of strings in the following format:
+  Une valeur de zéro signifie `illimité`.
 
-  * `*/*` or `*` - meaning that the action can be displayed for all mimetypes
-  * `type/subtype` - to display the action for files of a specific mimetype
-  * `type/*` - to display the action for files whose mimetypes are any subtype of
-    a specific type
-  * `!type/subtype` - to _not_ display the action for files of a specific mimetype
-  * `!type/*` - to _not_ display the action for files whose mimetypes are any 
-    subtype of a specific type
+  Si la valeur est supérieure à zéro, la valeur de la propriété `min_items` doit être inférieure ou égale à cette valeur.
 
-  All files in the selection must match an action's mimetype rules for that action
-  to be displayed. Mixing "not" rules with ... well, "not not" rules, can be
-  confusing.
+  *Par défaut* - illimité
 
-  Only the first appearance of a specific rule (regardless of any `!` "not"
-  prefix) is taken into account.
+* `mimetypes` - FACULTATIF - les types MIME des fichiers sélectionnés pour lesquels cette action doit être affichée (ou pour lesquels l'action ne doit pas être affichée).
 
-  *Default* - all mimetypes are accepted
+  La valeur doit être une liste JSON de chaînes dans le format suivant :
 
-* `path_patterns` - OPTIONAL - a list of glob or regular expression patterns against
-  which the full paths of the selected files are to be matched.
+  * `*/*` ou `*
 
-  The value should be a JSON list of strings, each in one of the following formats:
+` - signifiant que l'action peut être affichée pour tous les types MIME
+  * `type/sous-type` - pour afficher l'action pour les fichiers d'un type MIME spécifique
+  * `type/*` - pour afficher l'action pour les fichiers dont les types MIME sont n'importe quel sous-type d'un type spécifique
+  * `!type/sous-type` - pour _ne pas_ afficher l'action pour les fichiers d'un type MIME spécifique
+  * `!type/*` - pour _ne pas_ afficher l'action pour les fichiers dont les types MIME sont n'importe quel sous-type d'un type spécifique
 
-  * a "glob" expression - a simple but limited string pattern expression syntax that 
-    is used by many UNIX shell commands as well as the shell itself, consisting of 
-    the following placeholders:
+  Tous les fichiers dans la sélection doivent correspondre aux règles de type MIME d'une action pour que cette action soit affichée. Mélanger des règles "non" avec des règles "non non", peut être déroutant.
 
-    * `*` indicating zero or more characters
-    * `?` indicating a single character
-    * `[abc]` indicating one of the characters between the brackets
-    * `[!abc]` indicating none of the characters between the brackets
+  Seule la première apparition d'une règle spécifique (indépendamment de tout préfixe `!` "non") est prise en compte.
 
-    Quite often this syntax is all that you need in order to express the pattern
-    you wish to match against.
+  *Par défaut* - tous les types MIME sont acceptés
 
-    Note that globs inherently match against the whole path.
+* `path_patterns` - FACULTATIF - une liste de motifs globaux ou d'expressions régulières contre lesquels les chemins complets des fichiers sélectionnés doivent être comparés.
 
-  * `re:` followed by a regular expression (WITHOUT `/` delimiters) - more complex 
-    needs can be expressed as regular expressions.
+  La valeur doit être une liste JSON de chaînes, chacune dans l'un des formats suivants :
 
-    Note that regular expressions _do not_ inherently match against the whole path.
+  * une expression "glob" - une syntaxe d'expression de motif de chaîne simple mais limitée qui est utilisée par de nombreuses commandes shell UNIX ainsi que par le shell lui-même, composée des réserves suivantes :
     
-    This means that if any part of a selected file path matches the regular 
-    expression, the path will be accepted.
+    * `*` indiquant zéro ou plusieurs caractères
+    * `?` indiquant un seul caractère
+    * `[abc]` indiquant l'un des caractères entre les crochets
+    * `[!abc]` indiquant aucun des caractères entre les crochets
 
-    If you want to match against the whole path, start your regular expression with
-    `^` and end it with `$`.
+    Très souvent, cette syntaxe est tout ce dont vous avez besoin pour exprimer le motif que vous souhaitez comparer.
+
+    Notez que les globs correspondent intrinsèquement à l'ensemble du chemin.
+
+  * `re:` suivi d'une expression régulière (SANS délimiteurs `/`) - des besoins plus complexes peuvent être exprimés en expressions régulières.
+
+    Notez que les expressions régulières _ne correspondent pas_ intrinsèquement à l'ensemble du chemin.
+    
+    Cela signifie que si une partie d'un chemin de fichier sélectionné correspond à l'expression régulière, le chemin sera accepté.
+
+    Si vous souhaitez correspondre à l'ensemble du chemin, commencez votre expression régulière par `^` et terminez-la par `$`.
    
-  Either pattern format can be prefixed with `!` in order to negate the pattern.
+  Chaque format de motif peut être préfixé par `!` pour nier le motif.
 
-  All files in the selection must match an action's path pattern rules for that 
-  action to be displayed. Mixing "not" rules with ... well, "not not" rules, can be
-  confusing.
+  Tous les fichiers dans la sélection doivent correspondre aux règles de motif de chemin d'une action pour que cette action soit affichée. Mélanger des règles "non" avec des règles "non non", peut être déroutant.
 
-  Only the first appearance of a specific rule (regardless of any `!` "not"
-  prefix) is taken into account.
+  Seule la première apparition d'une règle spécifique (indépendamment de tout préfixe `!` "non") est prise en compte.
 
-  The accepted glob syntax is fully documented [here](https://docs.python.org/3/library/fnmatch.html).
-  The accepted Regular Expression syntax is fully documented [here ](https://docs.python.org/3/library/re.html#regular-expression-syntax).
+  La syntaxe glob acceptée est entièrement documentée [ici](https://docs.python.org/3/library/fnmatch.html).
+  La syntaxe d'expression régulière acceptée est entièrement documentée [ici](https://docs.python.org/3/library/re.html#regular-expression-syntax).
 
-  *Default* - all file paths are accepted
+  *Par défaut* - tous les chemins de fichiers sont acceptés
 
-* `permissions` - OPTIONAL - an indicator of the minimum access permissions that the user
-  must have for the selected files in order for the associated action to be presented in
-  the Nautilus context menu.
+* `permissions` - FACULTATIF - un indicateur des permissions d'accès minimales que l'utilisateur doit avoir pour les fichiers sélectionnés afin que l'action associée soit présentée dans le menu contextuel de Nautilus.
 
-  The valid values are:
+  Les valeurs valides sont :
 
-  * `read` - the user must at least have read permissions for the selected files
-  * `read-write` - the user must at least have read and write permissions for the selected files
-  * `read-execute` - For files, the user must at least have read and execute permissions for the selected files
-    For folders, the user must at least have read and navigational permissions for the selected folders
-  * `read-write-execute` - the user must have full read, write and execution/navigation permissions for the selected files
+  * `read` - l'utilisateur doit au moins avoir des permissions de lecture pour les fichiers sélectionnés
+  * `read-write` - l'utilisateur doit au moins avoir des permissions de lecture et d'écriture pour les fichiers sélectionnés
+  * `read-execute` - Pour les fichiers, l'utilisateur doit au moins avoir des permissions de lecture et d'exécution pour les fichiers sélectionnés. Pour les dossiers, l'utilisateur doit au moins avoir des permissions de lecture et de navigation pour les dossiers sélectionnés
+  * `read-write-execute` - l'utilisateur doit avoir des permissions complètes de lecture, d'écriture et d'exécution/navigation pour les fichiers sélectionnés
 
-  Any other value will disable the permissions check.
+  Toute autre valeur désactivera la vérification des permissions.
 
-  *Default* - user access permissions are not checked.
+  *Par défaut* - les permissions d'accès de l'utilisateur ne sont pas vérifiées.
 
-With the `mimetypes`, `filetypes` and `path_patterns` filter lists, all selected files
-must match at least one non-negated rule (if there are any non-negated rules), while 
-matching none of the negated rules, in order for the associated action to appear in the 
-context menu.
+Avec les list
+
+es de filtres `mimetypes`, `filetypes` et `path_patterns`, tous les fichiers sélectionnés doivent correspondre à au moins une règle non niée (s'il y a des règles non niées), tout en ne correspondant à aucune des règles niées, pour que l'action associée apparaisse dans le menu contextuel.
 
 # Place holders
-All the command line and `cwd` placeholders implemented by the 
-`filemanager/nautilus-actions` project are implemented by this extension, with 
-the same semantics:
+Tous les détenteurs de place de ligne de commande et `cwd` mis en œuvre par le projet `filemanager/nautilus-actions` sont implémentés par cette extension, avec les mêmes sémantiques :
 
-| Placeholder | Description                                                                                                | Repetition |
-|-------------|------------------------------------------------------------------------------------------------------------|------------|
-| `%b`        | the basename of the first selected item (e.g. `my-file.txt`)                                               | SINGULAR   |
-| `%B`        | space-separated list of the `%b` values of all selected items                                              | PLURAL     |
-| `%c`        | the number of items in the selection                                                                       | ANY        |
-| `%d`        | the full path to the directory holding the first selected item (e.g. `/home/me/my-first-dir/my-second-dir` | SINGULAR   |
-| `%D`        | space-separated list of the `%d` values of all selected items                                              | PLURAL     |
-| `%f`        | the full path of the first selected item (e.g. `/home/me/my-first-dir/my-second-dir/my-file.txt`           | SINGULAR   |
-| `%F`        | space-separated list of the `%f` values of all selected items                                              | PLURAL     |
-| `%h`        | the host name from the URI of the first selected item                                                      | ANY        |
-| `%m`        | the mimetype of the first selected item (e.g. `text/plain`)                                                | SINGULAR   |
-| `%M`        | space-separated list of the `%m` values of all selected items                                              | PLURAL     |
-| `%n`        | the username from the URI of the first selected item                                                       | ANY        |
-| `%o`        | no-op operator which forces a SINGULAR form of execution - see below for more details                      | SINGULAR   |
-| `%O`        | no-op operator which forces a PLURAL form of execution - see below for more details                        | PLURAL     |
-| `%p`        | the port from the URI of the first selected item                                                           | ANY        |
-| `%s`        | the URI scheme from the URI of the first selected item (e.g. `file`)                                       | ANY        |
-| `%u`        | the URI of the first selected item (e.g. `file:///home/me/my-first-dir/my-second-dir/my-file.txt`)         | SINGULAR   |
-| `%U`        | space-separated list of the `%u` values of all selected items                                              | PLURAL     |
-| `%w`        | the basename of the first selected item without it's extension (e.g. `my-file`)                            | SINGULAR   |
-| `%W`        | space-separated list of the `%w` values of all selected items                                              | PLURAL     |
-| `%x`        | the extension of the first selected item without it's extension (e.g. `txt`)                               | SINGULAR   |
-| `%X`        | space-separated list of the `%x` values of all selected items                                              | PLURAL     |
-| `%%`        | the `%` character                                                                                          | ANY        |
-
-Any embedded spaces found in the individual values are 'escaped' to ensure that
-the shell or system recognizes each value as an independent and complete 
-argument to the command.
-
-The meaning of the `Repetition` value is explained in the next section.
-
-# Execution behavior
-The `filemanager/nautilus-actions` project implemented a feature whereby a 
-configured command could be executed once only, regardless of the number items 
-in the selection, or once for each item in the selection.
-
-This extension implements the same feature with the same semantics.
-
-The decision as to which mode is desired is based upon the first placeholder 
-found in the `command_line` property value for the activated action:
-
-* If the placeholder has a `Repetition` property of `SINGULAR`, the command is
-  executed once for each item in the selection.
-* If the placeholder has a `Repetition` property of `PLURAL`, the command is
-  executed once only.
-* If the placeholder has a `Repetition` property of `ANY`, then the _next_
-  placeholder is examined.
-* If no placeholder with a `SINGULAR` or `PLURAL` repetition value is found in 
-  the command, then the command is executed only once.
-
-Additionally, if the command is to be executed once for each item in the 
-selection then any placeholder with a `Repetition` value of `SINGULAR` is 
-resolved to the corresponding value for the selected item for which the command
-is being executed.
-
-Placeholders with `Repetition` values that are not `SINGULAR` are resolved to 
-their full values for each execution of the command.
-
-## An example 
-
-This example is taken directly from the `filemanager/nautilus-actions` project 
-documentation:
-
-> Say the current folder is `/data`, and the current selection contains the 
-> three files `pierre`, `paul` and `jacques`.
-> 
-> If we have requested `echo %b`, then the following commands will be 
-> successively run:
-> 
-> ```
-> echo pierre
-> echo paul
-> echo jacques
-> ```
-> 
-> This is because `%b` marks a SINGULAR parameter. The command is then run once
-> for each of the selected items.
-> 
-> Contrarily, if we have requested `echo %B`, then the following command will 
-> be run:
-> 
-> ```
-> echo pierre paul jacques
-> ```
-> 
-> This is because `%B` marks a PLURAL parameter. The command is then run only 
-> once, with the list of selected items as arguments.
-> 
-> If we have requested `echo %b %B`, then the following commands will be 
-> successively run:
-> 
-> ```
-> echo pierre pierre paul jacques
-> echo paul pierre paul jacques
-> echo jacques pierre paul jacques
-> ```
-> 
-> This is because the first relevant parameter is `%b`, and so the command 
-> is run once for each selected item, replacing at each occurrence the `%b` 
-> parameter with the corresponding item. The second parameter is computed and 
-> added as arguments to the executed command.
-> 
-> And if we have requested `echo %B %b`, then the following command will be 
-> run:
-> 
-> ```
-> echo pierre paul jacques pierre
-> ```
-> 
-> This is because the first relevant parameter here is `%B`. The command is 
-> then run only once, replacing `%B` with the space-separated list of 
-> basenames. As the command is only run once, the `%b` is substituted only once
-> with the (first) basename.
-
-# Diagnostics
-Error messages are sent to the Nautilus `stdout` or `stderr` - including errors
-found in the configuration file (such as invalid JSON format).
-
-Additionally, the property `debug` can be set in the top level object, with a
-value of `true` or `false` (the default). When set to `true` further debug
-information is printed to the Nautilus `stdout`.
-
-In order to _see_ that output you will need to start Nautilus in a special way
-from a terminal emulator (e.g. `gnome-terminal`):
-
-```
-# Stop Nautilus
-nautilus -q  
-# Restart with `stdout` and `stderr` being displayed at the terminal
-nautilus --no-desktop
-```
-
-Note that, in order to stop this special execution mode, you will need to either
-close the terminal emulator, or, from another emulator run the `nautilus -q`
-command.
-
-# Acknowledgments
-The main acknowledgement is, of course, to the original Nautilus Actions 
-extension, later renamed to [Filemanager Actions](https://gitlab.gnome.org/Archive/filemanager-actions) 
-to reflect its wider applicability (Nemo, for example).
-
-Unfortunately, this extension is no longer maintained and is no longer 
-functional since Nautilus 42.2 (itself now renamed Gnome Files, though the 
-underlying programming objects are still in the Nautilus namespace).
-
-I was tempted to take over the maintenance of that project, but was put off by
-its complex C implementation (I'm a perfectly competent C programmer, mind!).
-
-I was convinced that a much less complex implementation of most of the main
-functionality was possible using Python and the glue to Nautilus found in the 
-`nautilus-python` framework, and by using a far more semantically relevant 
-configuration format such as JSON and adapting an existing JSON editor UI rather
-than building a configuration UI from scratch.
-
-I think I have proved my point :)
-
-Another big acknowledgement is of [Christoforos Aslanov](https://github.com/chr314)
-whose [Nautilus Copy Path](https://github.com/chr314/nautilus-copy-path) 
-extension provided the inspiration and template for the original POC of this 
-extension, and whose project structure, installation procedure and doc I initially
-mercilessly ripped off :)... and I'm even disrespectful enough to have provided 
-an alternative to his extension in my own sample config! 
-
-Thanks and apologies, Christoforos.
-
-The JSON Schema-based editor [JSON-Editor](https://github.com/json-editor/json-editor) is an amazing find! 
-The configurator is, in effect, an instance of that editor with a few tweaks to make it look and feel
-a bit more natural for this use case!
-
-The embedded JSON source editor is the [ACE source editor](https://ace.c9.io/) - another amazing project
-which was so easy to embed that one wonders why JSON-Editor doesn't use that for its own JSON source
-editing feature - I feel a PR coming on :).
-
-So, a BIG shout-out to those two projects!
+| Marqueur    | Description                                                                                                      | Répétition |
+|-------------|------------------------------------------------------------------------------------------------------------------|------------|
+| `%b`        | le nom de base du premier élément sélectionné (par exemple, `mon-fichier.txt`)                                   | SINGULIER |
+| `%B`        | liste séparée par des espaces des valeurs `%b` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%c`        | le nombre d'éléments dans la sélection                                                                          | TOUT       |
+| `%d`        | le chemin complet vers le répertoire contenant le premier élément sélectionné (par exemple, `/home/moi/mon-premier-repertoire/mon-deuxieme-repertoire`) | SINGULIER |
+| `%D`        | liste séparée par des espaces des valeurs `%d` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%f`        | le chemin complet du premier élément sélectionné (par exemple, `/home/moi/mon-premier-repertoire/mon-deuxieme-repertoire/mon-fichier.txt`) | SINGULIER |
+| `%F`        | liste séparée par des espaces des valeurs `%f` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%h`        | le nom d'hôte à partir de l'URI du premier élément sélectionné                                                | TOUT       |
+| `%m`        | le type MIME du premier élément sélectionné (par exemple, `text/plain`)                                         | SINGULIER |
+| `%M`        | liste séparée par des espaces des valeurs `%m` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%n`        | le nom d'utilisateur à partir de l'URI du premier élément sélectionné                                          | TOUT       |
+| `%o`        | opérateur non-opérationnel qui force une forme d'exécution SINGULIERE - voir ci-dessous pour plus de détails   | SINGULIER |
+| `%O`        | opérateur non-opérationnel qui force une forme d'exécution PLURIELLE - voir ci-dessous pour plus de détails    | PLURIEL    |
+| `%p`        | le port à partir de l'URI du premier élément sélectionné                                                       | TOUT       |
+| `%s`        | le schéma URI à partir de l'URI du premier élément sélectionné (par exemple, `file`)                           | TOUT       |
+| `%u`        | l'URI du premier élément sélectionné (par exemple, `file:///home/moi/mon-premier-repertoire/mon-deuxieme-repertoire/mon-fichier.txt`) | SINGULIER |
+| `%U`        | liste séparée par des espaces des valeurs `%u` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%w`        | le nom de base du premier élément sélectionné sans son extension (par exemple, `mon-fichier`)                  | SINGULIER |
+| `%W`        | liste séparée par des espaces des valeurs `%w` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%x`        | l'extension du premier élément sélectionné sans son extension (par exemple, `txt`)                              | SINGULIER |
+| `%X`        | liste séparée par des espaces des valeurs `%x` de tous les éléments sélectionnés                                | PLURIEL    |
+| `%%`        | le caractère `%`                                                                                                | TOUT       |
