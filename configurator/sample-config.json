@@ -1,81 +1,109 @@
 {
-	"actions": [
-		{
-			"type": "command",
-			"label": "Run in python3",
-			"command_line": "gnome-terminal -t \"Running Python %b\" --profile \"No Close\" -- python3 %b",
-			"cwd": "%d",
-			"max_items": 1,
-			"mimetypes": [
-				"text/x-python"
-			]
-		},
-		{
-			"type": "command",
-			"label": "Test all place holders",
-			"command_line": "%O printf '%%s\\n' '#b' %b '#B' %B '#c' %c '#d' %d '#D' %D '#f' %f '#F' %F '#h' %h '#m' %m '#M' %M '#n' %n '#o' %o '#O' %O '#p' %p '#s' %s '#u' %u '#U' %U '#w' %w '#W' %W '#x' %x '#X' %X | zenity --title \"Test all place holders\" --text-info",
-			"use_shell": true
-		},
-		{
-			"type": "command",
-			"label": "Open in gedit",
-			"command_line": "gedit %F",
-			"filetypes": [
-				"!directory",
-				"standard"
-			]
-		},
-		{
-			"type": "menu",
-			"label": "Folder Actions",
-			"actions": [
-				{
-					"type": "command",
-					"label": "Execute command here",
-					"command_line": "$(zenity --entry --text \"Enter command\" --title \"execute command in %f\" --width 800)",
-					"use_shell": true,
-					"cwd": "%f",
-					"max_items": 1,
-					"filetypes": [
-						"directory"
-					]
-				},
-				{
-					"type": "command",
-					"label": "Start HTTP server here",
-					"command_line": "gnome-terminal -t \"HTTP Server on %f\" -- python3 -m http.server --bind 127.0.0.1",
-					"cwd": "%f",
-					"max_items": 1,
-					"mimetypes": [
-						"inode/directory"
-					]
-				}
-			]
-		},
-		{
-			"type": "menu",
-			"label": "Copy details",
-			"actions": [
-				{
-					"type": "command",
-					"label": "Copy name",
-					"command_line": "echo -n %B | xclip -f -selection primary | xclip -selection clipboard",
-					"use_shell": true
-				},
-				{
-					"type": "command",
-					"label": "Copy path",
-					"command_line": "echo -n %F | xclip -f -selection primary | xclip -selection clipboard",
-					"use_shell": true
-				},
-				{
-					"type": "command",
-					"label": "Copy URI",
-					"command_line": "echo -n %U | xclip -f -selection primary | xclip -selection clipboard",
-					"use_shell": true
-				}
-			]
-		}
-	],
-	"debug": false
+    "actions": [
+        {
+            "type": "command",
+            "label": "Ouvrir avec code",
+            "command_line": "code %f",
+            "cwd": "%f",
+            "use_shell": true
+        },
+        {
+            "type": "command",
+            "label": "Copier chemin d'accés",
+            "command_line": "echo -n %F | xclip -f -selection primary | xclip -selection clipboard",
+            "use_shell": true
+        },
+        {
+            "type": "command",
+            "label": "Copier nom",
+            "command_line": "echo -n %B | xclip -f -selection primary | xclip -selection clipboard",
+            "use_shell": true
+        },
+        {
+            "type": "command",
+            "label": "Nouveau TEXTE",
+            "command_line": "touch new.txt",
+            "cwd": "%f",
+            "use_shell": true
+        },
+        {
+            "type": "command",
+            "label": "Nouveau SCRIPT",
+            "command_line": "echo \"#!/bin/bash\" > new.sh && chmod +x new.sh",
+            "cwd": "%f",
+            "use_shell": true
+        },
+        {
+            "type": "command",
+            "label": "Nouveau PYTHON",
+            "command_line": "touch new.py",
+            "use_shell": true
+        },
+        {
+            "type": "menu",
+            "label": "Folder Actions",
+            "actions": [
+                {
+                    "type": "command",
+                    "label": "Execute command here",
+                    "command_line": "$(zenity --entry --text \"Enter command\" --title \"execute command in %f\" --width 800)",
+                    "cwd": "%f",
+                    "use_shell": true,
+                    "max_items": 1,
+                    "filetypes": [
+                        "directory"
+                    ]
+                },
+                {
+                    "type": "command",
+                    "label": "Start HTTP server here",
+                    "command_line": "gnome-terminal -t \"HTTP Server on %f\" -- python3 -m http.server --bind 127.0.0.1",
+                    "cwd": "%f",
+                    "max_items": 1,
+                    "mimetypes": [
+                        "inode/directory"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "menu",
+            "label": "CODE TEMPLATES",
+            "actions": [
+                {
+                    "type": "menu",
+                    "label": "C++",
+                    "actions": []
+                },
+                {
+                    "type": "menu",
+                    "label": "Python",
+                    "actions": [
+                        {
+                            "type": "command",
+                            "label": "Py builder 1 ",
+                            "command_line": "git clone -b nautilus https://github.com/SECRET-GUEST/pyTemplate.git",
+                            "cwd": "%f",
+                            "use_shell": true
+                        }
+                    ]
+                },
+                {
+                    "type": "menu",
+                    "label": "Javascript",
+                    "actions": [
+                        {
+                            "type": "command",
+                            "label": "React typescript",
+                            "command_line": "git clone https://github.com/SECRET-GUEST/reactsx.git",
+                            "cwd": "%f",
+                            "use_shell": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "sort": "manual",
+    "debug": false
 }
