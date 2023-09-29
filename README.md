@@ -73,7 +73,7 @@ Ensuite, elle dépend de `python 3+`, `nautilus-python`, et certains outils de g
 
 Pour installer l'extension manuellement, vous devrez suivre ces étapes :
 
-1. `git clone https://github.com/bassmanitram/actions-for-nautilus.git`
+1. `git clone https://github.com/SECRET-GUEST/actions-for-nautilus.git`
 2. `cd actions-for-nautilus`
 3. `make install`
 
