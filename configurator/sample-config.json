@@ -54,19 +54,6 @@
         },
         {
             "type": "menu",
-            "label": "CONVERT",
-            "actions": [
-                {
-                    "type": "command",
-                    "label": "mp4 to mov",
-                    "command_line": "\"/home/gawain/SCRIPTS/fast scripts/actions/convert/MP4toMOV\"",
-                    "cwd": "%f",
-                    "use_shell": true
-                }
-            ]
-        },
-        {
-            "type": "menu",
             "label": "Folder Actions",
             "actions": [
                 {
