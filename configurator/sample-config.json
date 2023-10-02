@@ -46,8 +46,20 @@
             "actions": [
                 {
                     "type": "command",
+                    "label": "MAKE",
+                    "command_line": "gnome-terminal -- bash -i -c \"make\"",
+                    "cwd": "%f"
+                },
+                {
+                    "type": "command",
                     "label": "make config",
                     "command_line": "gnome-terminal -- bash -i -c \"./configure && make && sudo make install\"",
+                    "cwd": "%f"
+                },
+                {
+                    "type": "command",
+                    "label": "Make clean",
+                    "command_line": "gnome-terminal -- bash -i -c \"make clean\"",
                     "cwd": "%f"
                 }
             ]
