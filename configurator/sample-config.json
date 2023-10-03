@@ -102,7 +102,7 @@
                         {
                             "type": "command",
                             "label": "C builder 1",
-                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cppTemplate.git c_template_1",
+                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cTemplate.git c_template_1",
                             "cwd": "%f",
                             "use_shell": true
                         }
