@@ -154,6 +154,13 @@
                         }
                     ]
                 }
+                {
+                    "type": "command",
+                    "label": "README ",
+                    "command_line": "git clone https://github.com/SECRET-GUEST/READMEtemplate",
+                    "cwd": "%f",
+                    "use_shell": true
+                }
             ]
         }
     ],
