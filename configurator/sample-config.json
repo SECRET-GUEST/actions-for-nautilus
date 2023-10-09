@@ -21,6 +21,13 @@
         },
         {
             "type": "command",
+            "label": "Créer un raccourcis",
+            "command_line": "ln -s \"$(xclip -o)\" \"$(basename $(xclip -o))\"",
+            "cwd": "%f",
+            "use_shell": true
+        },
+        {
+            "type": "command",
             "label": "Nouveau TEXTE",
             "command_line": "touch new.txt",
             "cwd": "%f",
