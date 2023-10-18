@@ -109,7 +109,7 @@
                         {
                             "type": "command",
                             "label": "C builder 1",
-                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cTemplate.git c_template_1",
+                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cTemplate.git c_project",
                             "cwd": "%f",
                             "use_shell": true
                         }
@@ -122,7 +122,7 @@
                         {
                             "type": "command",
                             "label": "C++ builder 1",
-                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cppTemplate.git cpp_template_1",
+                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cppTemplate.git cpp_project",
                             "cwd": "%f",
                             "use_shell": true
                         }
@@ -135,7 +135,7 @@
                         {
                             "type": "command",
                             "label": "Py builder 1 ",
-                            "command_line": "git clone -b nautilus https://github.com/SECRET-GUEST/pyTemplate.git Py_builder_1 ",
+                            "command_line": "git clone -b nautilus https://github.com/SECRET-GUEST/pyTemplate.git Python_project ",
                             "cwd": "%f",
                             "use_shell": true
                         }
@@ -147,20 +147,13 @@
                     "actions": [
                         {
                             "type": "command",
-                            "label": "React typescript",
-                            "command_line": "git clone --branch reactsx https://github.com/SECRET-GUEST/jsTemplate.git React_typescript_builder_1",
-                            "cwd": "%f",
-                            "use_shell": true
-                        },
-                        {
-                            "type": "command",
-                            "label": "React Three Typescript",
-                            "command_line": "git clone --branch threeJs https://github.com/SECRET-GUEST/jsTemplate.git React_three_typescript_builder_1",
+                            "label": "vite react ts three scss",
+                            "command_line": "git clone https://github.com/SECRET-GUEST/pyTemplate.git --branch Vite-react-ts-three-sass React_project",
                             "cwd": "%f",
                             "use_shell": true
                         }
                     ]
-                }
+                },
                 {
                     "type": "command",
                     "label": "README ",
