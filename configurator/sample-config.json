@@ -148,7 +148,7 @@
                         {
                             "type": "command",
                             "label": "vite react ts three scss",
-                            "command_line": "git clone https://github.com/SECRET-GUEST/pyTemplate.git --branch Vite-react-ts-three-sass React_project",
+                            "command_line": "git clone -b Vite-react-ts-three-sass https://github.com/SECRET-GUEST/jsTemplate.git React_project",
                             "cwd": "%f",
                             "use_shell": true
                         }
