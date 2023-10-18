@@ -109,7 +109,7 @@
                         {
                             "type": "command",
                             "label": "C builder 1",
-                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cTemplate.git c_project",
+                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cTemplate.git c_template_1",
                             "cwd": "%f",
                             "use_shell": true
                         }
@@ -122,7 +122,7 @@
                         {
                             "type": "command",
                             "label": "C++ builder 1",
-                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cppTemplate.git cpp_project",
+                            "command_line": "git clone --branch nautilus https://github.com/SECRET-GUEST/cppTemplate.git cpp_template_1",
                             "cwd": "%f",
                             "use_shell": true
                         }
@@ -134,8 +134,8 @@
                     "actions": [
                         {
                             "type": "command",
-                            "label": "Py builder 1 ",
-                            "command_line": "git clone -b nautilus https://github.com/SECRET-GUEST/pyTemplate.git Python_project ",
+                            "label": "Windows builder",
+                            "command_line": "git clone -b windows https://github.com/SECRET-GUEST/pyTemplate.git Py_builder_1 ",
                             "cwd": "%f",
                             "use_shell": true
                         }
