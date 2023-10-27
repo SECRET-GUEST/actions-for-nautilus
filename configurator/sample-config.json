@@ -2,6 +2,12 @@
     "actions": [
         {
             "type": "command",
+            "label": "Actualiser",
+            "command_line": "sudo systemctl daemon-reload",
+            "use_shell": true
+        },
+        {
+            "type": "command",
             "label": "Ouvrir avec code",
             "command_line": "code %f",
             "cwd": "%f",
