@@ -1,3 +1,5 @@
+![Status Down](https://img.shields.io/badge/STATUS-DOWN-red?colorA=cyan)
+
 ## This is an alternative version provided in French 🇫🇷. For the original 🇬🇧 **English** 🇺🇸 software, [please click here](https://github.com/bassmanitram/actions-for-nautilus#readme).
 
 
